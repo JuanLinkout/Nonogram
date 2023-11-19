@@ -5,6 +5,7 @@ import {
   TransitionPresets
 } from '@react-navigation/stack'
 import { Home } from '@screens/Home'
+import { Game } from '@screens/Game'
 
 // Components
 
@@ -17,8 +18,9 @@ export const AppStack: React.FC = () => {
         headerShown: false,
         ...TransitionPresets.SlideFromRightIOS
       })}
-      initialRouteName="Home"
+      initialRouteName="Game"
     >
+      <Stack.Screen name="Game" component={Game} />
       <Stack.Screen name="Home" component={Home} />
     </Stack.Navigator>
   )
