@@ -14,6 +14,9 @@ export const BoardContainer = styled(View)`
   align-items: center;
   border-width: 1px;
   border-color: ${theme.colors.black};
+
+  border-right-width: none;
+  border-bottom-width: none;
 `
 
 export const RowContainer = styled(View)`

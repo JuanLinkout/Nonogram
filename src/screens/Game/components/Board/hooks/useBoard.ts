@@ -34,11 +34,11 @@ export function useBoard({ board, fillMode, onCellChange }: Props) {
   const minCellSize = 20
   const maxCellSize = 50
   const cellsPerRow = Math.min(
-    Math.floor(width / minCellSize),
+    Math.floor((width - 90) / minCellSize),
     board.schema[0].length
   )
   const cellSize = Math.max(
-    Math.min(width / cellsPerRow, maxCellSize),
+    Math.min((width - 90) / cellsPerRow, maxCellSize),
     minCellSize
   )
 

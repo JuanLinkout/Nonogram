@@ -27,7 +27,7 @@ export const BoardHints: React.FC<Props> = ({
       {data.map((item, index) => (
         <HintContainer key={index} cellSize={cellSize} direction={direction}>
           {item.map((value, idx) => (
-            <Typography key={idx} variant="s2" color={theme.colors.textPrimary}>
+            <Typography key={idx} variant="s3" color={theme.colors.textPrimary}>
               {value}
             </Typography>
           ))}

@@ -7,8 +7,8 @@ import styled from 'styled-components/native'
 export interface CellProps extends ViewProps {
   filled: EnumCellFill
   size: number
-  hasBottomBorder: boolean
-  hasRightBorder: boolean
+  row: number
+  column: number
 }
 
 export const CellTouchable = styled(View)<CellProps>`
@@ -18,15 +18,13 @@ export const CellTouchable = styled(View)<CellProps>`
   justify-content: center;
   align-items: center;
 
-  border-right-width: ${({ hasRightBorder }) =>
-    hasRightBorder ? '1px' : '0px'};
-  border-bottom-width: ${({ hasBottomBorder }) =>
-    hasBottomBorder ? '1px' : '0px'};
+  border-right-width: 1px;
+  border-bottom-width: 1px;
 
-  border-right-color: ${({ hasRightBorder }) =>
-    hasRightBorder && theme.colors.darkBorder};
-  border-bottom-color: ${({ hasBottomBorder }) =>
-    hasBottomBorder && theme.colors.darkBorder};
+  border-right-color: ${({ column }) =>
+    column % 5 === 0 ? theme.colors.black : theme.colors.darkBorder};
+  border-bottom-color: ${({ row }) =>
+    row % 5 === 0 ? theme.colors.black : theme.colors.darkBorder};
   ${({ filled }) =>
     filled === EnumCellFill.FILLED && {
       backgroundColor: theme.colors.black

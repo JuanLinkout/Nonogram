@@ -1,23 +1,18 @@
 // External Libraries
 import React from 'react'
+import { GestureDetector } from 'react-native-gesture-handler'
 
 // Components
 import { BoardCell } from '../BoardCell'
+import { BoardHints } from '../BoardHints'
 
 // Services
 import { EnumCellFill, IBoard } from '@services/types/Game/Board'
-import { shouldRenderRightBorder } from './functions/shouldRenderRightBorder'
-import { shouldRenderBottomBorder } from './functions/shouldRenderBottomBorder'
+import { EnumDirection } from '@services/types/Game/Direction'
+import { useBoard } from './hooks/useBoard'
 
 // Styles
 import { BoardContainer, Container, ContainerRow, RowContainer } from './styles'
-import {
-  GestureDetector,
-  PanGestureHandler
-} from 'react-native-gesture-handler'
-import { useBoard } from './hooks/useBoard'
-import { EnumDirection } from '@services/types/Game/Direction'
-import { BoardHints } from '../BoardHints'
 
 interface BoardProps {
   board: IBoard
@@ -66,14 +61,8 @@ export const Board: React.FC<BoardProps> = ({
               <RowContainer key={rowIndex}>
                 {row.map((cell, colIndex) => (
                   <BoardCell
-                    hasBottomBorder={shouldRenderBottomBorder(
-                      rowIndex,
-                      board.size
-                    )}
-                    hasRightBorder={shouldRenderRightBorder(
-                      colIndex,
-                      board.size
-                    )}
+                    row={rowIndex + 1}
+                    column={colIndex + 1}
                     key={colIndex}
                     filled={cell.filled}
                     size={cellSize}

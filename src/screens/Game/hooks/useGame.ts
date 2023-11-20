@@ -1,22 +1,23 @@
 import { EnumCellFill, IBoard } from '@services/types/Game/Board'
 import { useEffect, useMemo, useState } from 'react'
 import { changeCell } from '../functions/changeCell'
-import { NONOGRAM_MOCK } from '@utils/mocks/gameMock'
+import { NONOGRAM_MOCK, NONOGRAM_MOCK_10 } from '@utils/mocks/gameMock'
 import { generateGrid } from '../functions/generateGrid'
 import { generateBoardHints } from '../functions/generateBoardHints'
 import { updateBoardIfCompleted } from '../functions/completeRow'
 import { calculateBoardTotalFilled } from '../functions/calculateBoardTotalFilled'
 import { verifyIfGameIsCorrect } from '../functions/verifyIfGameIsComplete'
 import { Alert } from 'react-native'
+import { calculateGameSize } from '../functions/calculateGameSize'
 
 export function useGame() {
   // States
   const [fillMode, setFillMode] = useState(EnumCellFill.FILLED)
   const [board, setBoard] = useState<IBoard>({
-    schema: generateGrid(5),
-    solution: NONOGRAM_MOCK,
-    size: 5,
-    hints: generateBoardHints(NONOGRAM_MOCK)
+    solution: NONOGRAM_MOCK_10,
+    size: calculateGameSize(NONOGRAM_MOCK_10),
+    hints: generateBoardHints(NONOGRAM_MOCK_10),
+    schema: generateGrid(10)
   })
 
   // Memos

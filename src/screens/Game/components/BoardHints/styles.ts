@@ -11,10 +11,14 @@ interface Props extends IMargin {
 
 function getSize(direction: EnumDirection, cellSize: number) {
   if (direction === EnumDirection.HORIZONTAL) {
-    return { width: cellSize - 8 + 'px', height: '80px' }
+    return {
+      width: cellSize - 8 + 'px',
+      paddingBottom: '4px',
+      paddingTop: '4px'
+    }
   }
 
-  return { height: cellSize - 8 + 'px', width: '60px' }
+  return { height: cellSize - 8 + 'px', width: '60px', paddingRight: '4px' }
 }
 
 export const Container = styled.View<Props>`
@@ -34,12 +38,10 @@ export const HintContainer = styled.View<Props>`
   border-width: 1px;
   border: ${theme.colors.border};
 
-  gap: 8px;
+  column-gap: 6px;
 
   align-items: center;
   justify-content: flex-end;
-
-  padding: 8px;
 
   ${props => getSize(props.direction, props.cellSize)}
 `
