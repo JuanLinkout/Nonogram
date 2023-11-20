@@ -22,6 +22,7 @@ export const Game: React.FC = () => {
     totalFilledBlocks,
     totalBlocksToFill,
     handleCellChange,
+    handleRedoPress,
     handleFillModeChange
   } = useGame()
 
@@ -41,6 +42,7 @@ export const Game: React.FC = () => {
         />
 
         <BoardFooter
+          onRedoPress={handleRedoPress}
           fillMode={fillMode}
           onFillModeChange={handleFillModeChange}
         />

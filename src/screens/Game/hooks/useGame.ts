@@ -1,5 +1,5 @@
-import { EnumCellFill, IBoard } from '@services/types/Game/Board'
-import { useEffect, useMemo, useState } from 'react'
+import { EnumCellFill, IBoard, IBoardCell } from '@services/types/Game/Board'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { changeCell } from '../functions/changeCell'
 import { NONOGRAM_MOCK, NONOGRAM_MOCK_10 } from '@utils/mocks/gameMock'
 import { generateGrid } from '../functions/generateGrid'
@@ -20,6 +20,9 @@ export function useGame() {
     schema: generateGrid(10)
   })
 
+  // Refs
+  const actionQueue = useRef<IBoardCell[][][]>([board.schema])
+
   // Memos
   const totalFilledBlocks = useMemo(() => {
     return calculateBoardTotalFilled(board.schema)
@@ -32,6 +35,14 @@ export function useGame() {
   // Functions
   function handleFillModeChange(newFillMode: EnumCellFill) {
     setFillMode(newFillMode)
+  }
+
+  function handleRedoPress() {
+    if (actionQueue.current.length > 1) {
+      actionQueue.current.pop()
+      const schema = actionQueue.current[actionQueue.current.length - 1]
+      setBoard(prev => ({ ...prev, schema: schema }))
+    }
   }
 
   function handleCellChange(
@@ -61,6 +72,8 @@ export function useGame() {
         }
       })
 
+      actionQueue.current.push(updatedBoard.schema)
+
       return { ...prev, schema: updatedBoard.schema }
     })
   }
@@ -79,6 +92,7 @@ export function useGame() {
     totalFilledBlocks,
     totalBlocksToFill,
     handleCellChange,
+    handleRedoPress,
     handleFillModeChange
   }
 }

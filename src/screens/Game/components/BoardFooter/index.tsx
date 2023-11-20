@@ -15,11 +15,13 @@ import { Button, Container, FooterContainer, Square } from './styles'
 interface Props {
   fillMode: EnumCellFill
   onFillModeChange: (fillMode: EnumCellFill) => void
+  onRedoPress: () => void
 }
 
 export const BoardFooter: React.FC<Props> = ({
   fillMode,
-  onFillModeChange
+  onFillModeChange,
+  onRedoPress
 }) => (
   <FooterContainer>
     <Container>
@@ -48,10 +50,7 @@ export const BoardFooter: React.FC<Props> = ({
     </Container>
 
     <Container>
-      <Button
-        isSelected={false}
-        onPress={() => onFillModeChange(EnumCellFill.FLAGGED)}
-      >
+      <Button isSelected={false} onPress={onRedoPress}>
         <RedoSVG />
       </Button>
     </Container>
