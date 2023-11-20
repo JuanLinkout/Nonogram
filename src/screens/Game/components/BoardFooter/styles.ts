@@ -2,6 +2,14 @@ import { Touchable } from '@components/buttons/Touchable'
 import { theme } from '@global/theme'
 import styled from 'styled-components/native'
 
+export const FooterContainer = styled.View`
+  flex-direction: row;
+  width: 100%;
+  padding: 0px 32px;
+
+  justify-content: space-between;
+`
+
 export const Container = styled.View`
   border-radius: 4px;
   padding: 6px;

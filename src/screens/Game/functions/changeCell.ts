@@ -22,6 +22,17 @@ export function changeCell({
   const schema = JSON.parse(JSON.stringify(board.schema))
   const currentValue = schema[row][column]
 
+  const isHint = fillMode === EnumCellFill.HINT
+  const isFilled = currentValue.filled === EnumCellFill.FILLED
+  if (isHint) {
+    if (isFilled) return { schema: board.schema }
+
+    const value = board.solution[row][column].filled
+    if (value === EnumCellFill.EMPTY) currentValue.filled = EnumCellFill.FLAGGED
+    else currentValue.filled = EnumCellFill.FILLED
+    return { schema }
+  }
+
   // Caso esteja arrastando, não preencher blocos que já estão preenchidos com valor oposto que não seja empty
   const isNotEmpty = currentValue.filled !== EnumCellFill.EMPTY
   const isOtherFilling = onGoingFillMode !== currentValue.filled

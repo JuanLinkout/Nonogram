@@ -1,7 +1,8 @@
 export enum EnumCellFill {
   FILLED = 'FILLED',
   EMPTY = 'EMPTY',
-  FLAGGED = 'FLAGGED'
+  FLAGGED = 'FLAGGED',
+  HINT = 'HINT'
 }
 
 export interface IBoardCell {
