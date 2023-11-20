@@ -26,6 +26,7 @@ interface BoardProps {
     column: number,
     row: number,
     fillMode: EnumCellFill,
+    onGoingFillMode: EnumCellFill,
     onGoing: boolean
   ) => void
 }

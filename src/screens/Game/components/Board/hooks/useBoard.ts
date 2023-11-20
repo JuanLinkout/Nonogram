@@ -15,6 +15,7 @@ interface Props {
     column: number,
     row: number,
     fillMode: EnumCellFill,
+    onGoingFillMode: EnumCellFill,
     onGoing: boolean
   ) => void
 }
@@ -52,7 +53,7 @@ export function useBoard({ board, fillMode, onCellChange }: Props) {
   // Animations
   const previousRow = useSharedValue(-1)
   const previousColumn = useSharedValue(-1)
-  const currentFill = useSharedValue<EnumCellFill>(EnumCellFill.EMPTY)
+  const onGoingFillMode = useSharedValue<EnumCellFill>(EnumCellFill.EMPTY)
   const fillingDirection = useSharedValue<EnumDirection | null>(null)
 
   const gestureHandler = Gesture.Pan()
@@ -69,14 +70,20 @@ export function useBoard({ board, fillMode, onCellChange }: Props) {
       previousColumn.value = response.column
       previousRow.value = response.row
 
-      const result = getCellFill({
+      const cellFillMode = getCellFill({
         board,
         column: response.column,
         fillMode,
         row: response.row
       })
-      currentFill.value = result
-      runOnJS(onCellChange)(response.column, response.row, result, false)
+      onGoingFillMode.value = cellFillMode
+      runOnJS(onCellChange)(
+        response.column,
+        response.row,
+        onGoingFillMode.value,
+        fillMode,
+        false
+      )
     })
     .onChange(event => {
       const { column, row } = getBoardPosition({
@@ -101,7 +108,7 @@ export function useBoard({ board, fillMode, onCellChange }: Props) {
 
       if (direction !== fillingDirection.value && fillingDirection.value) return
 
-      runOnJS(onCellChange)(column, row, currentFill.value, true)
+      runOnJS(onCellChange)(column, row, onGoingFillMode.value, fillMode, true)
       fillingDirection.value = direction
       previousColumn.value = column
       previousRow.value = row

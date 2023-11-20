@@ -23,6 +23,7 @@ export function useGame() {
     column: number,
     row: number,
     fillMode: EnumCellFill,
+    onGoingFillMode: EnumCellFill,
     onGoing: boolean
   ): void {
     setBoard(prev => {
@@ -31,12 +32,18 @@ export function useGame() {
         column,
         fillMode,
         row,
-        onGoing
+        onGoing,
+        onGoingFillMode
       })
 
       const updatedBoard = updateBoardIfCompleted({
-        ...prev,
-        schema: response.schema
+        fillMode: onGoing ? onGoingFillMode : fillMode,
+        column,
+        row,
+        board: {
+          ...prev,
+          schema: response.schema
+        }
       })
 
       return { ...prev, schema: updatedBoard.schema }

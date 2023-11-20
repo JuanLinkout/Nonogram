@@ -14,6 +14,7 @@ export function getCellFill({
   row
 }: Args): EnumCellFill {
   'worklet'
-  const isEmpty = board.schema[row][column].filled === EnumCellFill.EMPTY
-  return isEmpty ? fillMode : EnumCellFill.EMPTY
+
+  if (board.schema[row][column].filled === fillMode) return EnumCellFill.EMPTY
+  return fillMode
 }
