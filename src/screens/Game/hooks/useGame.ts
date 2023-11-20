@@ -12,12 +12,16 @@ export function useGame() {
     size: 5
   })
 
-  function handleCellChange(column: number, row: number) {
+  function handleCellChange(
+    column: number,
+    row: number,
+    fillMode: EnumCellFill
+  ): void {
     setBoard(prev => {
-      const updatedSchema = changeCell({ board: prev, column, fillMode, row })
-      return { ...prev, schema: updatedSchema }
+      const response = changeCell({ board: prev, column, fillMode, row })
+      return { ...prev, schema: response.schema }
     })
   }
 
-  return { board, handleCellChange }
+  return { board, fillMode, handleCellChange }
 }

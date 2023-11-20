@@ -9,11 +9,15 @@ import { Board } from './components/Board'
 import { useGame } from './hooks/useGame'
 
 export const Game: React.FC = () => {
-  const { board, handleCellChange } = useGame()
+  const { board, fillMode, handleCellChange } = useGame()
 
   return (
     <Container>
-      <Board board={board} onCellChange={handleCellChange} />
+      <Board
+        board={board}
+        fillMode={fillMode}
+        onCellChange={handleCellChange}
+      />
     </Container>
   )
 }
