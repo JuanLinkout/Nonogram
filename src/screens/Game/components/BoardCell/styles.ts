@@ -15,6 +15,9 @@ export const CellTouchable = styled(View)<CellProps>`
   width: ${({ size }) => `${size}px`};
   height: ${({ size }) => `${size}px`};
 
+  justify-content: center;
+  align-items: center;
+
   border-right-width: ${({ hasRightBorder }) =>
     hasRightBorder ? '1px' : '0px'};
   border-bottom-width: ${({ hasBottomBorder }) =>

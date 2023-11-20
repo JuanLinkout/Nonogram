@@ -6,4 +6,6 @@ export const Container = styled.View`
   align-items: center;
   height: 100%;
   background-color: ${theme.colors.white};
+
+  gap: 16px;
 `

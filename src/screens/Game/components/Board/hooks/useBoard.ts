@@ -1,6 +1,6 @@
 import { EnumCellFill, IBoard } from '@services/types/Game/Board'
-import { useState } from 'react'
-import { useWindowDimensions } from 'react-native'
+import { useRef, useState } from 'react'
+import { View, useWindowDimensions } from 'react-native'
 import { Gesture } from 'react-native-gesture-handler'
 import { runOnJS, useSharedValue } from 'react-native-reanimated'
 import { getBoardPosition } from '../functions/getBoardPosition'
@@ -11,7 +11,12 @@ import { getFillingDirection } from '../functions/getFillingDirection'
 interface Props {
   board: IBoard
   fillMode: EnumCellFill
-  onCellChange: (column: number, row: number, fillMode: EnumCellFill) => void
+  onCellChange: (
+    column: number,
+    row: number,
+    fillMode: EnumCellFill,
+    onGoing: boolean
+  ) => void
 }
 
 export function useBoard({ board, fillMode, onCellChange }: Props) {
@@ -20,6 +25,9 @@ export function useBoard({ board, fillMode, onCellChange }: Props) {
 
   // States
   const [boardPosition, setBoardPosition] = useState({ x: 0, y: 0 })
+
+  // Refs
+  const viewRef = useRef<View>(null)
 
   // Sizes
   const minCellSize = 20
@@ -33,9 +41,17 @@ export function useBoard({ board, fillMode, onCellChange }: Props) {
     minCellSize
   )
 
+  function loadBoardPosition() {
+    if (viewRef.current) {
+      viewRef.current.measure((x, y, width, height, pageX, pageY) => {
+        setBoardPosition({ x: pageX, y: pageY })
+      })
+    }
+  }
+
   // Animations
-  const currentRow = useSharedValue(-1)
-  const currentColumn = useSharedValue(-1)
+  const previousRow = useSharedValue(-1)
+  const previousColumn = useSharedValue(-1)
   const currentFill = useSharedValue<EnumCellFill>(EnumCellFill.EMPTY)
   const fillingDirection = useSharedValue<EnumDirection | null>(null)
 
@@ -50,8 +66,8 @@ export function useBoard({ board, fillMode, onCellChange }: Props) {
         gridLayoutSize: board.size
       })
 
-      currentColumn.value = response.column
-      currentRow.value = response.row
+      previousColumn.value = response.column
+      previousRow.value = response.row
 
       const result = getCellFill({
         board,
@@ -60,7 +76,7 @@ export function useBoard({ board, fillMode, onCellChange }: Props) {
         row: response.row
       })
       currentFill.value = result
-      runOnJS(onCellChange)(response.column, response.row, result)
+      runOnJS(onCellChange)(response.column, response.row, result, false)
     })
     .onChange(event => {
       const { column, row } = getBoardPosition({
@@ -73,26 +89,26 @@ export function useBoard({ board, fillMode, onCellChange }: Props) {
       })
 
       const isSameCoordinate =
-        row === currentRow.value && column === currentColumn.value
+        row === previousRow.value && column === previousColumn.value
       if (isSameCoordinate) return
 
       const direction = getFillingDirection({
         column,
-        previousColumn: currentColumn.value,
-        previousRow: currentRow.value,
+        previousColumn: previousColumn.value,
+        previousRow: previousRow.value,
         row
       })
 
       if (direction !== fillingDirection.value && fillingDirection.value) return
 
-      runOnJS(onCellChange)(column, row, currentFill.value)
+      runOnJS(onCellChange)(column, row, currentFill.value, true)
       fillingDirection.value = direction
-      currentColumn.value = column
-      currentRow.value = row
+      previousColumn.value = column
+      previousRow.value = row
     })
     .onEnd(() => {
       fillingDirection.value = null
     })
 
-  return { cellSize, gestureHandler, loadBoardPosition: setBoardPosition }
+  return { cellSize, viewRef, gestureHandler, loadBoardPosition }
 }

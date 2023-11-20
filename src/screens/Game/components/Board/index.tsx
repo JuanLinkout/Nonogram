@@ -10,17 +10,24 @@ import { shouldRenderRightBorder } from './functions/shouldRenderRightBorder'
 import { shouldRenderBottomBorder } from './functions/shouldRenderBottomBorder'
 
 // Styles
-import { BoardContainer, RowContainer } from './styles'
+import { BoardContainer, Container, ContainerRow, RowContainer } from './styles'
 import {
   GestureDetector,
   PanGestureHandler
 } from 'react-native-gesture-handler'
 import { useBoard } from './hooks/useBoard'
+import { EnumDirection } from '@services/types/Game/Direction'
+import { BoardHints } from '../BoardHints'
 
 interface BoardProps {
   board: IBoard
   fillMode: EnumCellFill
-  onCellChange: (column: number, row: number, fillMode: EnumCellFill) => void
+  onCellChange: (
+    column: number,
+    row: number,
+    fillMode: EnumCellFill,
+    onGoing: boolean
+  ) => void
 }
 
 export const Board: React.FC<BoardProps> = ({
@@ -29,29 +36,53 @@ export const Board: React.FC<BoardProps> = ({
   onCellChange
 }) => {
   // Hooks
-  const { cellSize, gestureHandler, loadBoardPosition } = useBoard({
+  const { cellSize, viewRef, gestureHandler, loadBoardPosition } = useBoard({
     board,
     fillMode,
     onCellChange
   })
 
   return (
-    <GestureDetector gesture={gestureHandler}>
-      <BoardContainer onLayout={e => loadBoardPosition(e.nativeEvent.layout)}>
-        {board.schema.map((row, rowIndex) => (
-          <RowContainer key={rowIndex}>
-            {row.map((cell, colIndex) => (
-              <BoardCell
-                hasBottomBorder={shouldRenderBottomBorder(rowIndex, board.size)}
-                hasRightBorder={shouldRenderRightBorder(colIndex, board.size)}
-                key={colIndex}
-                filled={cell.filled}
-                size={cellSize}
-              />
+    <ContainerRow>
+      <BoardHints
+        marginBottom="4px"
+        data={board.hints.rows}
+        direction={EnumDirection.VERTICAL}
+        cellSize={cellSize}
+      />
+
+      <Container>
+        <BoardHints
+          marginLeft="4px"
+          data={board.hints.columns}
+          direction={EnumDirection.HORIZONTAL}
+          cellSize={cellSize}
+        />
+
+        <GestureDetector gesture={gestureHandler}>
+          <BoardContainer ref={viewRef} onLayout={loadBoardPosition}>
+            {board.schema.map((row, rowIndex) => (
+              <RowContainer key={rowIndex}>
+                {row.map((cell, colIndex) => (
+                  <BoardCell
+                    hasBottomBorder={shouldRenderBottomBorder(
+                      rowIndex,
+                      board.size
+                    )}
+                    hasRightBorder={shouldRenderRightBorder(
+                      colIndex,
+                      board.size
+                    )}
+                    key={colIndex}
+                    filled={cell.filled}
+                    size={cellSize}
+                  />
+                ))}
+              </RowContainer>
             ))}
-          </RowContainer>
-        ))}
-      </BoardContainer>
-    </GestureDetector>
+          </BoardContainer>
+        </GestureDetector>
+      </Container>
+    </ContainerRow>
   )
 }

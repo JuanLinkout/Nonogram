@@ -1,4 +1,4 @@
-import { EnumCellFill, IBoard, IBoardCell } from '@services/types/Game/Board'
+import { EnumCellFill, IBoard } from '@services/types/Game/Board'
 
 interface Args {
   row: number

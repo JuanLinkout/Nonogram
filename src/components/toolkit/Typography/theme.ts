@@ -1,4 +1,4 @@
-import theme from '@global/theme'
+import { theme } from '@global/theme'
 
 export const TypographyTheme = {
   h1: {
