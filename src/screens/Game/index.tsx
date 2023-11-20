@@ -1,31 +1,50 @@
 // External Libraries
 import React from 'react'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 // Components
 import { Board } from './components/Board'
+import { BoardFooter } from './components/BoardFooter'
+import { BoardHeader } from './components/BoardHeader'
 
 // Hooks
 import { useGame } from './hooks/useGame'
+import { EnumDificulty } from '@services/types/Game/Dificulty'
 
 // Styles
-import { Container } from './styles'
-import { BoardFooter } from './components/BoardFooter'
+import { Container, GameContainer } from './styles'
 
 export const Game: React.FC = () => {
-  const { board, fillMode, handleCellChange, handleFillModeChange } = useGame()
+  const { top } = useSafeAreaInsets()
+  const {
+    board,
+    fillMode,
+    totalFilledBlocks,
+    totalBlocksToFill,
+    handleCellChange,
+    handleFillModeChange
+  } = useGame()
 
   return (
-    <Container>
-      <Board
-        board={board}
-        fillMode={fillMode}
-        onCellChange={handleCellChange}
+    <Container paddingTop={`${top}px`}>
+      <BoardHeader
+        dificulty={EnumDificulty.EASY}
+        totalFilledBlocks={totalFilledBlocks}
+        totalBlocksToFill={totalBlocksToFill}
       />
 
-      <BoardFooter
-        fillMode={fillMode}
-        onFillModeChange={handleFillModeChange}
-      />
+      <GameContainer>
+        <Board
+          board={board}
+          fillMode={fillMode}
+          onCellChange={handleCellChange}
+        />
+
+        <BoardFooter
+          fillMode={fillMode}
+          onFillModeChange={handleFillModeChange}
+        />
+      </GameContainer>
     </Container>
   )
 }

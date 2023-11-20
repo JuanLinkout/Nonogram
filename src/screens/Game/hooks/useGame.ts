@@ -1,12 +1,16 @@
 import { EnumCellFill, IBoard } from '@services/types/Game/Board'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { changeCell } from '../functions/changeCell'
 import { NONOGRAM_MOCK } from '@utils/mocks/gameMock'
 import { generateGrid } from '../functions/generateGrid'
 import { generateBoardHints } from '../functions/generateBoardHints'
 import { updateBoardIfCompleted } from '../functions/completeRow'
+import { calculateBoardTotalFilled } from '../functions/calculateBoardTotalFilled'
+import { verifyIfGameIsCorrect } from '../functions/verifyIfGameIsComplete'
+import { Alert } from 'react-native'
 
 export function useGame() {
+  // States
   const [fillMode, setFillMode] = useState(EnumCellFill.FILLED)
   const [board, setBoard] = useState<IBoard>({
     schema: generateGrid(5),
@@ -15,6 +19,16 @@ export function useGame() {
     hints: generateBoardHints(NONOGRAM_MOCK)
   })
 
+  // Memos
+  const totalFilledBlocks = useMemo(() => {
+    return calculateBoardTotalFilled(board.schema)
+  }, [board.schema])
+
+  const totalBlocksToFill = useMemo(() => {
+    return calculateBoardTotalFilled(board.solution)
+  }, [board.solution])
+
+  // Functions
   function handleFillModeChange(newFillMode: EnumCellFill) {
     setFillMode(newFillMode)
   }
@@ -50,5 +64,20 @@ export function useGame() {
     })
   }
 
-  return { board, fillMode, handleCellChange, handleFillModeChange }
+  useEffect(() => {
+    if (totalBlocksToFill === totalFilledBlocks) {
+      const isComplete = verifyIfGameIsCorrect({ board })
+      if (isComplete) Alert.alert('Parabéns', 'Jogo concluido com sucesso')
+      if (!isComplete) Alert.alert('Ops', 'Você não conseguiu completar o jogo')
+    }
+  }, [totalBlocksToFill, totalFilledBlocks])
+
+  return {
+    board,
+    fillMode,
+    totalFilledBlocks,
+    totalBlocksToFill,
+    handleCellChange,
+    handleFillModeChange
+  }
 }
