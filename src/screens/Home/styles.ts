@@ -8,3 +8,8 @@ export const Container = styled.View<IPadding>`
   padding: 0px 20px;
   ${applyPadding}
 `
+
+export const ItemContainer = styled.View`
+  align-items: center;
+  row-gap: 6px;
+`
