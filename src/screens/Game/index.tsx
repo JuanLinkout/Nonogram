@@ -13,6 +13,8 @@ import { EnumDificulty } from '@services/types/Game/Dificulty'
 
 // Styles
 import { Container, GameContainer } from './styles'
+import { FadeIn } from 'react-native-reanimated'
+import { mapSizeToDificulty } from '@utils/functions/mapSizeToDificulty'
 
 export const Game: React.FC = () => {
   const { top } = useSafeAreaInsets()
@@ -21,6 +23,7 @@ export const Game: React.FC = () => {
     fillMode,
     totalFilledBlocks,
     totalBlocksToFill,
+    showingBoard,
     handleCellChange,
     handleRedoPress,
     handleFillModeChange
@@ -29,24 +32,27 @@ export const Game: React.FC = () => {
   return (
     <Container paddingTop={`${top}px`}>
       <BoardHeader
-        dificulty={EnumDificulty.EASY}
+        name={board.name}
+        dificulty={mapSizeToDificulty(board.size)}
         totalFilledBlocks={totalFilledBlocks}
         totalBlocksToFill={totalBlocksToFill}
       />
 
-      <GameContainer>
-        <Board
-          board={board}
-          fillMode={fillMode}
-          onCellChange={handleCellChange}
-        />
+      {showingBoard ? (
+        <GameContainer entering={FadeIn}>
+          <Board
+            board={board}
+            fillMode={fillMode}
+            onCellChange={handleCellChange}
+          />
 
-        <BoardFooter
-          onRedoPress={handleRedoPress}
-          fillMode={fillMode}
-          onFillModeChange={handleFillModeChange}
-        />
-      </GameContainer>
+          <BoardFooter
+            onRedoPress={handleRedoPress}
+            fillMode={fillMode}
+            onFillModeChange={handleFillModeChange}
+          />
+        </GameContainer>
+      ) : null}
     </Container>
   )
 }

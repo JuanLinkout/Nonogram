@@ -7,6 +7,7 @@ export enum EnumCellFill {
 
 export interface IBoardCell {
   filled: EnumCellFill
+  color?: string
 }
 
 export interface IBoardHints {
@@ -15,6 +16,7 @@ export interface IBoardHints {
 }
 
 export interface IBoard {
+  name: string
   schema: IBoardCell[][]
   solution: IBoardCell[][]
   hints: IBoardHints

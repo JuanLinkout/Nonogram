@@ -1,24 +1,21 @@
 import { EnumCellFill, IBoard, IBoardCell } from '@services/types/Game/Board'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { changeCell } from '../functions/changeCell'
-import { NONOGRAM_MOCK, NONOGRAM_MOCK_10 } from '@utils/mocks/gameMock'
-import { generateGrid } from '../functions/generateGrid'
-import { generateBoardHints } from '../functions/generateBoardHints'
 import { updateBoardIfCompleted } from '../functions/completeRow'
 import { calculateBoardTotalFilled } from '../functions/calculateBoardTotalFilled'
 import { verifyIfGameIsCorrect } from '../functions/verifyIfGameIsComplete'
-import { Alert } from 'react-native'
-import { calculateGameSize } from '../functions/calculateGameSize'
+import { Alert, InteractionManager } from 'react-native'
+import { useRoute } from '@react-navigation/native'
+import { GameDetailsRouteProp } from '@routes/types'
 
 export function useGame() {
+  // Hooks
+  const { params } = useRoute<GameDetailsRouteProp>()
+
   // States
   const [fillMode, setFillMode] = useState(EnumCellFill.FILLED)
-  const [board, setBoard] = useState<IBoard>({
-    solution: NONOGRAM_MOCK_10,
-    size: calculateGameSize(NONOGRAM_MOCK_10),
-    hints: generateBoardHints(NONOGRAM_MOCK_10),
-    schema: generateGrid(10)
-  })
+  const [board, setBoard] = useState<IBoard>(params.board)
+  const [showingBoard, setShowingBoard] = useState(false)
 
   // Refs
   const actionQueue = useRef<IBoardCell[][][]>([board.schema])
@@ -86,9 +83,16 @@ export function useGame() {
     }
   }, [totalBlocksToFill, totalFilledBlocks])
 
+  useEffect(() => {
+    InteractionManager.runAfterInteractions(() => {
+      setShowingBoard(true)
+    })
+  }, [])
+
   return {
     board,
     fillMode,
+    showingBoard,
     totalFilledBlocks,
     totalBlocksToFill,
     handleCellChange,

@@ -5,7 +5,22 @@ import React from 'react'
 
 // Styles
 import { Container } from './styles'
+import { useHome } from './hooks/useHome'
+import { Touchable } from '@components/buttons/Touchable'
+import { Typography } from '@components/toolkit/Typography'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export const Home: React.FC = () => {
-  return <Container>{/* Code */}</Container>
+  const { top } = useSafeAreaInsets()
+  const { games, handleProductPress } = useHome()
+
+  return (
+    <Container paddingTop={`${top}px`}>
+      {games.map(item => (
+        <Touchable key={item.name} onPress={() => handleProductPress(item)}>
+          <Typography variant="s2">{item.name}</Typography>
+        </Touchable>
+      ))}
+    </Container>
+  )
 }

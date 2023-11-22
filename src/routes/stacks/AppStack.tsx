@@ -18,7 +18,7 @@ export const AppStack: React.FC = () => {
         headerShown: false,
         ...TransitionPresets.SlideFromRightIOS
       })}
-      initialRouteName="Game"
+      initialRouteName="Home"
     >
       <Stack.Screen name="Game" component={Game} />
       <Stack.Screen name="Home" component={Home} />

@@ -1,5 +1,5 @@
 // External Libraries
-import React from 'react'
+import React, { useEffect } from 'react'
 import { GestureDetector } from 'react-native-gesture-handler'
 
 // Components
@@ -13,6 +13,7 @@ import { useBoard } from './hooks/useBoard'
 
 // Styles
 import { BoardContainer, Container, ContainerRow, RowContainer } from './styles'
+import { useNavigation } from '@react-navigation/native'
 
 interface BoardProps {
   board: IBoard

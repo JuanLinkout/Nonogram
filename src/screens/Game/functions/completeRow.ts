@@ -14,7 +14,9 @@ export function updateBoardIfCompleted({
   fillMode,
   row
 }: Args): IBoard {
-  if (fillMode !== EnumCellFill.FILLED) return board
+  if (fillMode !== EnumCellFill.FILLED && fillMode !== EnumCellFill.HINT) {
+    return board
+  }
 
   const { schema, hints } = board
   const numRows = schema.length

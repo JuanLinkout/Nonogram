@@ -17,28 +17,34 @@ import { calculateBoardTotalFilled } from '@screens/Game/functions/calculateBoar
 // Styles
 import { Container, Row, TextContainer } from './styles'
 import { theme } from '@global/theme'
+import { mapDificultyTitle } from '@utils/functions/mapDificultyTitle'
+import { useNavigation } from '@react-navigation/native'
 
 interface Props {
   dificulty: EnumDificulty
+  name: string
   totalFilledBlocks: number
   totalBlocksToFill: number
 }
 
 export const BoardHeader: React.FC<Props> = ({
   dificulty,
+  name,
   totalBlocksToFill,
   totalFilledBlocks
 }) => {
+  const navigation = useNavigation()
+
   return (
     <Container>
-      <IconButton icon={<ChevronLeftSVG />} />
+      <IconButton icon={<ChevronLeftSVG />} onPress={navigation.goBack} />
 
       <TextContainer>
         <Typography variant="s2" color={theme.colors.textPrimary}>
-          Nome do nível
+          {name}
         </Typography>
         <Typography variant="b2" color={theme.colors.textSecondary}>
-          Fácil
+          {mapDificultyTitle(dificulty)}
         </Typography>
 
         <Row>
