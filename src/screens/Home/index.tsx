@@ -1,9 +1,9 @@
 // External Libraries
 import React from 'react'
+import { Dimensions } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 // Components
-import { Touchable } from '@components/buttons/Touchable'
 import { ColoredGrid } from '@components/game/ColoredGrid'
 import { Typography } from '@components/toolkit/Typography'
 
@@ -18,7 +18,6 @@ import {
   ItemContainer
 } from './styles'
 import { theme } from '@global/theme'
-import { Dimensions } from 'react-native'
 
 export const Home: React.FC = () => {
   const { top } = useSafeAreaInsets()
@@ -43,6 +42,7 @@ export const Home: React.FC = () => {
       <GamesContainer>
         {games.map(item => (
           <GameContainer
+            completed={item.completed}
             key={item.name}
             onPress={() => handleProductPress(item)}
             width={cardSize}

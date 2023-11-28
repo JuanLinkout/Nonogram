@@ -1,6 +1,4 @@
 // Bibliotecas Externas
-import { SwitchCheckSVG } from '@assets/icons/actionButton/SwitchCheck'
-import theme from '@global/theme'
 import React, { useEffect } from 'react'
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native'
 import Animated, {
@@ -13,6 +11,8 @@ import Animated, {
 
 // Estilização
 import { Container } from './styles'
+import { theme } from '@global/theme'
+import { SwitchCheckSVG } from '@assets/icons/SwitchCheck'
 
 interface SwitchProps extends TouchableOpacityProps {
   setSelected: (value: boolean) => void
@@ -54,7 +54,7 @@ export const Switch: React.FC<SwitchProps> = ({
         [0, 1],
         [
           theme.colors.border,
-          !disabled ? theme.colors.primary : theme.colors.darkSurface
+          !disabled ? theme.colors.black : theme.colors.darkSurface
         ]
       )
     }

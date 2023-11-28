@@ -5,12 +5,14 @@ import { updateBoardIfCompleted } from '../functions/completeRow'
 import { calculateBoardTotalFilled } from '../functions/calculateBoardTotalFilled'
 import { verifyIfGameIsCorrect } from '../functions/verifyIfGameIsComplete'
 import { Alert, InteractionManager } from 'react-native'
-import { useRoute } from '@react-navigation/native'
-import { GameDetailsRouteProp } from '@routes/types'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import { GameDetailsRouteProp, NavigationProps } from '@routes/types'
+import { GamesRepository } from '@services/repository/games'
 
 export function useGame() {
   // Hooks
   const { params } = useRoute<GameDetailsRouteProp>()
+  const navigation = useNavigation<NavigationProps>()
 
   // States
   const [fillMode, setFillMode] = useState(EnumCellFill.FILLED)
@@ -75,12 +77,31 @@ export function useGame() {
     })
   }
 
-  useEffect(() => {
-    if (totalBlocksToFill === totalFilledBlocks) {
-      const isComplete = verifyIfGameIsCorrect({ board })
-      if (isComplete) Alert.alert('Parabéns', 'Jogo concluido com sucesso')
-      if (!isComplete) Alert.alert('Ops', 'Você não conseguiu completar o jogo')
+  function handleGameVerification() {
+    const isComplete = verifyIfGameIsCorrect({ board })
+    if (isComplete) {
+      Alert.alert('Parabéns', 'Jogo concluido com sucesso', [
+        {
+          onPress: () => {
+            GamesRepository.addCompletedGame(board.name)
+            navigation.goBack()
+          }
+        }
+      ])
     }
+    if (!isComplete)
+      Alert.alert('Ops', 'Você não conseguiu completar o jogo', [
+        { text: 'Continuar' },
+        {
+          text: 'Sair',
+          style: 'destructive',
+          onPress: navigation.goBack
+        }
+      ])
+  }
+
+  useEffect(() => {
+    if (totalBlocksToFill === totalFilledBlocks) handleGameVerification()
   }, [totalBlocksToFill, totalFilledBlocks])
 
   useEffect(() => {

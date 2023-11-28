@@ -8,6 +8,7 @@ export const theme = {
     border: '#EBEBEB',
     darkBorder: '#B4B4B4',
     surface: '#FAFAFA',
+    successLowOpacity: '#45B6001A',
     darkSurface: '#F4F4F4',
     error: '#fe0000'
   },

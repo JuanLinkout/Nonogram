@@ -22,3 +22,7 @@ export interface IBoard {
   hints: IBoardHints
   size: number
 }
+
+export interface IListIBoard extends IBoard {
+  completed?: boolean
+}

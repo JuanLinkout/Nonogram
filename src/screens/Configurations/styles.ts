@@ -7,7 +7,7 @@ export const Container = styled.ScrollView<IPadding>`
   height: 100%;
   width: 100%;
   padding: 0px 20px;
-  background-color: white;
+  background-color: ${({ theme }) => theme.colors.surface};
   ${applyPadding}
 `
 
@@ -23,15 +23,9 @@ export const GamesContainer = styled.View`
   flex-wrap: wrap;
 `
 
-interface Props {
-  width: number
-  completed?: boolean
-}
-
-export const GameContainer = styled(Touchable)<Props>`
+export const GameContainer = styled(Touchable)<{ width: number }>`
   padding: 12px;
   width: ${({ width }) => width}px;
   border-radius: 4px;
-  background-color: ${({ theme, completed }) =>
-    completed ? theme.colors.successLowOpacity : theme.colors.darkSurface};
+  background-color: ${({ theme }) => theme.colors.darkSurface};
 `

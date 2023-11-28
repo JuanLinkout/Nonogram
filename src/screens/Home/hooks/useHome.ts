@@ -1,19 +1,25 @@
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { NavigationProps } from '@routes/types'
 import { GamesRepository } from '@services/repository/games'
-import { IBoard } from '@services/types/Game/Board'
+import { IBoard, IListIBoard } from '@services/types/Game/Board'
 import { useEffect, useState } from 'react'
 
 export function useHome() {
   // Hooks
   const navigation = useNavigation<NavigationProps>()
+  const isFocused = useIsFocused()
 
   // States
-  const [games, setGames] = useState<IBoard[]>([])
+  const [games, setGames] = useState<IListIBoard[]>([])
 
   async function fetchGames() {
     const response = await GamesRepository.loadAllGames()
-    setGames(response)
+    const completedGames = await GamesRepository.getCompletedGames()
+    const boards = response.map(item => ({
+      ...item,
+      completed: completedGames[item.name]
+    }))
+    setGames(boards)
   }
 
   function handleProductPress(board: IBoard) {
@@ -22,7 +28,7 @@ export function useHome() {
 
   useEffect(() => {
     fetchGames()
-  }, [])
+  }, [isFocused])
 
   return { games, handleProductPress }
 }
